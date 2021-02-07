@@ -29,11 +29,10 @@ class FormAddActivity : AppCompatActivity() {
         supportActionBar?.title = "Add Activity"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.etTime.setText(
-            "${
-                Calendar.getInstance().get(Calendar.HOUR_OF_DAY).toString().padStart(2, '0')
-            }:${Calendar.getInstance().get(Calendar.MINUTE).toString().padStart(2, '0')}"
-        )
+        val dateNow = "${
+            Calendar.getInstance().get(Calendar.HOUR_OF_DAY).toString().padStart(2, '0')
+        }:${Calendar.getInstance().get(Calendar.MINUTE).toString().padStart(2, '0')}"
+        binding.etTime.setText(dateNow)
 
         binding.btnSelectTime.setOnClickListener {
             val mCurrentTime = binding.etTime.text.split(":")
@@ -43,7 +42,9 @@ class FormAddActivity : AppCompatActivity() {
                 this,
                 { timePicker, selectedHour, selectedMinute ->
                     binding.etTime.setText(
-                        "${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}"
+                        "${selectedHour.toString().padStart(2, '0')}:${
+                            selectedMinute.toString().padStart(2, '0')
+                        }"
                     )
                 },
                 hour,
@@ -59,7 +60,8 @@ class FormAddActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             val form = arrayOf(binding.etName, binding.etTime)
             if (isNotValid(form)) {
-                val model = ActivityModel(0, binding.etName.text.toString(), binding.etTime.text.toString())
+                val model =
+                    ActivityModel(0, binding.etName.text.toString(), binding.etTime.text.toString())
                 viewModel.insertActivity(model)
             }
         }
