@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.billbull.dev.android.kaizen.databinding.ActivityFormAddBinding
 import com.billbull.dev.android.kaizen.helper.FormValidation.isNotValid
 import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel
 import com.billbull.dev.android.kaizen.viewmodels.ActivityViewModel
+import com.google.android.material.textfield.TextInputEditText
 import java.util.*
 
 class FormAddActivity : AppCompatActivity() {
@@ -29,19 +31,23 @@ class FormAddActivity : AppCompatActivity() {
         supportActionBar?.title = "Add Activity"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // set up custom id's
+        val etName = (binding.etName.editText as TextInputEditText)
+        val etTime = (binding.etTime.editText as TextInputEditText)
+
         val dateNow = "${
             Calendar.getInstance().get(Calendar.HOUR_OF_DAY).toString().padStart(2, '0')
         }:${Calendar.getInstance().get(Calendar.MINUTE).toString().padStart(2, '0')}"
-        binding.etTime.setText(dateNow)
+        etTime.setText(dateNow)
 
         binding.btnSelectTime.setOnClickListener {
-            val mCurrentTime = binding.etTime.text.split(":")
-            val hour: Int = Integer.parseInt(mCurrentTime[0])
+            val mCurrentTime = etTime.text?.split(":")
+            val hour: Int = Integer.parseInt(mCurrentTime!![0])
             val minute: Int = Integer.parseInt(mCurrentTime[1])
             val mTimePicker = TimePickerDialog(
                 this,
                 { timePicker, selectedHour, selectedMinute ->
-                    binding.etTime.setText(
+                    etTime?.setText(
                         "${selectedHour.toString().padStart(2, '0')}:${
                             selectedMinute.toString().padStart(2, '0')
                         }"
@@ -61,8 +67,18 @@ class FormAddActivity : AppCompatActivity() {
             val form = arrayOf(binding.etName, binding.etTime)
             if (isNotValid(form)) {
                 val model =
-                    ActivityModel(0, binding.etName.text.toString(), binding.etTime.text.toString())
+                    ActivityModel(0, etName.text.toString(), etTime.text.toString())
                 viewModel.insertActivity(model)
+            }
+        }
+
+        // some listener here
+        etName.doOnTextChanged { text, start, before, count ->
+            run {
+                if (text != null && text.isNotEmpty()) {
+                    binding.etName.error = null
+                    binding.etName.isErrorEnabled = false
+                }
             }
         }
 

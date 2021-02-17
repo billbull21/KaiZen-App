@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context=".view.activity.FormAddActivity">
 
-    <LinearLayout
+    <include
+        android:id="@+id/includeToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/main_toolbar"
+        android:layout_alignParentTop="true"/>
+
+    <ScrollView
+        android:layout_below="@id/includeToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <include
-            android:id="@+id/includeToolbar"
-            layout="@layout/main_toolbar" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,25 +26,24 @@
             android:orientation="vertical"
             android:padding="@dimen/main_margin">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Activity Name"
-                android:textStyle="bold" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:hint="type your activity name"
-                android:inputType="text" />
+                android:gravity="center"
+                android:hint="Activity Name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <TextView
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Activity Time"
-                android:textStyle="bold" />
+                android:layout_height="5dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,36 +52,39 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/et_time"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.7"
-                    android:hint="type your activity name"
-                    android:inputType="none"
+                    android:gravity="center"
+                    android:hint="Activity Time"
                     android:enabled="false"
-                    android:autofillHints=""
-                    android:background="@android:color/transparent"/>
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_selectTime"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.3"
-                    android:background="@color/purple_200"
-                    android:text="CHOOSE" />
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="CHOOSE"/>
             </LinearLayout>
-
-
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/second_margin"
-                android:background="@color/purple_500"
-                android:elevation="5dp"
-                android:text="SAVE" />
-
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/second_margin"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_alignParentBottom="true"
+        android:text="SAVE" />
+</RelativeLayout>

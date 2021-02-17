@@ -15,14 +15,28 @@
         <include
             android:id="@+id/includeToolbar"
             layout="@layout/main_toolbar" />
-        <TextView
-            android:id="@+id/tv_mainText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:padding="@dimen/main_margin"
-            android:gravity="center"
-            android:text="ADD THINGS THAT YOU NEED TO DO AT LEAST, ONE MINUTE A DAY!"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/tv_mainText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="@dimen/main_margin"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:text="ADD THINGS THAT YOU NEED TO DO AT LEAST, ONE MINUTE A DAY!"/>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible"/>
+        </RelativeLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
