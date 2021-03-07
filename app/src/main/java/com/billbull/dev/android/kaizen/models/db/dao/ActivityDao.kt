@@ -1,5 +1,6 @@
 package com.billbull.dev.android.kaizen.models.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel
 
@@ -18,7 +19,9 @@ interface ActivityDao {
     @Query("DELETE FROM t_activity")
     suspend fun deleteAll()
 
+    // why not use suspend ? because Room does not support LiveData with suspended functions.
+    // LiveData already works on a background thread and should be used directly without using coroutines
     @Query("SELECT * FROM t_activity ORDER BY id DESC")
-    suspend fun fetchAllActivity(): List<ActivityModel>
+    fun fetchAllActivity(): LiveData<List<ActivityModel>>
 
 }

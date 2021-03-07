@@ -8,7 +8,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 object FormValidation {
 
-    fun <T> isNotValid(editText: Array<T>): Boolean where T: EditText {
+    fun <T> isValid(editText: Array<T>): Boolean where T: EditText {
         val probe = arrayListOf<Int>()
         for (form in editText) {
             if (form.text.trim().isEmpty()) {
@@ -20,7 +20,7 @@ object FormValidation {
         return false
     }
 
-    fun isNotValid(editText: Array<TextInputLayout>): Boolean {
+    fun isValid(editText: Array<TextInputLayout>): Boolean {
         val probe = arrayListOf<Int>()
         for (form in editText) {
             val et = (form.editText as TextInputEditText).text
