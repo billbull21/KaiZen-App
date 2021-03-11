@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.billbull.dev.android.kaizen.databinding.ItemListBinding
 import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel
 
-class MainActivityAdapter(private val dataList: List<ActivityModel>, private val listener: (ActivityModel) -> Unit)
+class MainActivityAdapter(private val dataList: List<ActivityModel>, private val delete: (Int) -> Unit, private val listener: (ActivityModel) -> Unit)
     : RecyclerView.Adapter<MainActivityAdapter.MainActivityViewHolder>() {
 
     private lateinit var binding: ItemListBinding
@@ -23,6 +23,7 @@ class MainActivityAdapter(private val dataList: List<ActivityModel>, private val
                 binding.tvActivityName.text = activity_name
                 binding.tvActivityTime.text = activity_time
 
+                binding.ivDelete.setOnClickListener { delete(id) }
                 itemView.setOnClickListener { listener(this) }
             }
         }

@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:fitsSystemWindows="true"
         android:theme="@style/Theme.KaiZen">
         <activity android:name=".view.activity.FormAddActivity" />
         <activity android:name=".view.activity.MainActivity">

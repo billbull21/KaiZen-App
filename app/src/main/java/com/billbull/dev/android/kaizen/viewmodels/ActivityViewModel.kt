@@ -1,5 +1,6 @@
 package com.billbull.dev.android.kaizen.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel

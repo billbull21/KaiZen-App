@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context=".view.activity.FormAddActivity">
 
@@ -79,12 +78,26 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/btn_save"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/second_margin"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_alignParentBottom="true"
-        android:text="SAVE" />
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/placeSnackBar">
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/second_margin"
+                style="@style/Widget.MaterialComponents.Button"
+                android:text="SAVE" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 </RelativeLayout>

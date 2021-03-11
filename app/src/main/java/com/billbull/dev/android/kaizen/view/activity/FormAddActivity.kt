@@ -2,7 +2,9 @@ package com.billbull.dev.android.kaizen.view.activity
 
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
@@ -13,11 +15,9 @@ import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel
 import com.billbull.dev.android.kaizen.models.db.init.AppDatabase
 import com.billbull.dev.android.kaizen.viewmodels.ActivityViewModel
 import com.billbull.dev.android.kaizen.viewmodels.ActivityViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.*
 
 class FormAddActivity : AppCompatActivity() {
@@ -83,17 +83,22 @@ class FormAddActivity : AppCompatActivity() {
             if (isValid(form)) {
                 val model =
                     ActivityModel(0, etName.text.toString(), etTime.text.toString())
-                CoroutineScope(Dispatchers.Main).launch {
-                    try {
-                        viewModel.insertActivity(model).also {
-                            // set the result
-                            setResult(RESULT_CODE, Intent().apply {
-                                putExtra("data", model)
-                            })
-                            finish() // pop to previous activity
+                CoroutineScope(Dispatchers.Main).launch(CoroutineExceptionHandler { context, error ->
+                    when (error) {
+                        is SQLiteConstraintException -> {
+                            Snackbar.make(binding.placeSnackBar, "the clock is already in use", Snackbar.LENGTH_SHORT).show()
                         }
-                    } catch (e: Exception) {
-                        print("ERROR Save : $e")
+                        else -> {
+                            Log.e("ERROR IS : ", error.cause.toString())
+                        }
+                    }
+                }) {
+                    viewModel.insertActivity(model).also {
+                        // set the result
+                        setResult(RESULT_CODE, Intent().apply {
+                            putExtra("data", model)
+                        })
+                        finish() // pop to previous activity
                     }
                 }
             }

@@ -3,6 +3,8 @@ package com.billbull.dev.android.kaizen.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,9 +18,7 @@ import com.billbull.dev.android.kaizen.view.adapter.MainActivityAdapter
 import com.billbull.dev.android.kaizen.viewmodels.ActivityViewModel
 import com.billbull.dev.android.kaizen.viewmodels.ActivityViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,7 +59,28 @@ class MainActivity : AppCompatActivity() {
     private fun fetchAllData() {
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.getAllActivity().observe(this@MainActivity, Observer<List<ActivityModel>> {
-                mainActivityAdapter = MainActivityAdapter(it) { item ->
+                mainActivityAdapter = MainActivityAdapter(it, { deleteId ->
+                    AlertDialog.Builder(this@MainActivity).apply {
+                        setTitle("Delete ?")
+                        setMessage("Are you sure want to delete this ?")
+                        setPositiveButton("YES") { _, _ ->
+                            CoroutineScope(Dispatchers.Main).launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+                                // HERE WHEN ERROR
+                            }) {
+                                viewModel.deleteActivityById(deleteId).also {
+                                    Snackbar.make(
+                                        binding.fabAdd,
+                                        "successfully deleted",
+                                        Snackbar.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        }
+                        setNegativeButton("NO") { _, _ -> null }
+                        // requestWindowFeature(Window.FEATURE_NO_TITLE)
+                        show()
+                    }
+                }) { item ->
                     Log.e("CLICKED : ", item.activity_name)
                 }
                 binding.rvMain.apply {
