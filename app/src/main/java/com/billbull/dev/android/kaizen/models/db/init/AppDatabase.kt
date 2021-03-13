@@ -9,8 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.billbull.dev.android.kaizen.models.db.dao.ActivityDao
 import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel
 
-
-@Database(entities = [ActivityModel::class], version = 1)
+@Database(entities = [ActivityModel::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun activityDao(): ActivityDao
@@ -42,9 +41,9 @@ abstract class AppDatabase : RoomDatabase() {
         // add column on table without delete data
         private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL(
-//                    "ALTER TABLE t_uang_masuk ADD COLUMN tanggal TEXT"
-//                )
+                database.execSQL(
+                    "ALTER TABLE t_activity ADD COLUMN is_remind_active INTEGER DEFAULT 0 NOT NULL"
+                )
 //                database.execSQL(
 //                    "ALTER TABLE t_uang_masuk ADD COLUMN nomor TEXT"
 //                )

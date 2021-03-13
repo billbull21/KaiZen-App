@@ -3,7 +3,6 @@ package com.billbull.dev.android.kaizen.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Window
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -57,57 +56,62 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchAllData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.getAllActivity().observe(this@MainActivity, Observer<List<ActivityModel>> {
-                mainActivityAdapter = MainActivityAdapter(it, { deleteId ->
-                    AlertDialog.Builder(this@MainActivity).apply {
-                        setTitle("Delete ?")
-                        setMessage("Are you sure want to delete this ?")
-                        setPositiveButton("YES") { _, _ ->
-                            CoroutineScope(Dispatchers.Main).launch(CoroutineExceptionHandler { coroutineContext, throwable ->
-                                // HERE WHEN ERROR
-                            }) {
-                                viewModel.deleteActivityById(deleteId).also {
-                                    Snackbar.make(
-                                        binding.fabAdd,
-                                        "successfully deleted",
-                                        Snackbar.LENGTH_SHORT
-                                    ).show()
-                                }
+        viewModel.getAllActivity().observe(this@MainActivity, Observer<List<ActivityModel>> {
+            mainActivityAdapter = MainActivityAdapter(it, { deleteId ->
+                AlertDialog.Builder(this@MainActivity).apply {
+                    setTitle("Delete ?")
+                    setMessage("Are you sure want to delete this ?")
+                    setPositiveButton("YES") { _, _ ->
+                        CoroutineScope(Dispatchers.Main).launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+                            // HERE WHEN ERROR
+                        }) {
+                            viewModel.deleteActivityById(deleteId).also {
+                                Snackbar.make(
+                                    binding.fabAdd,
+                                    "successfully deleted",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
                             }
                         }
-                        setNegativeButton("NO") { _, _ -> null }
-                        // requestWindowFeature(Window.FEATURE_NO_TITLE)
-                        show()
                     }
-                }) { item ->
-                    Log.e("CLICKED : ", item.activity_name)
+                    setNegativeButton("NO") { _, _ -> null }
+                    // requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    show()
                 }
-                binding.rvMain.apply {
-                    layoutManager = LinearLayoutManager(this@MainActivity)
-                    adapter = mainActivityAdapter
-                }
-                binding.progressBar.invisible()
-                if (it.isEmpty()) {
-                    binding.rvMain.invisible()
-                    binding.tvMainText.visible()
-                } else {
-                    binding.rvMain.visible()
-                    binding.tvMainText.invisible()
-                }
-            })
-        }
+            }) { item ->
+                startActivityForResult(
+                    Intent(this, FormAddActivity::class.java).apply {
+                        putExtra("data", item)
+                    }, REQUEST_CODE
+                )
+            }
+            binding.rvMain.apply {
+                layoutManager = LinearLayoutManager(this@MainActivity)
+                adapter = mainActivityAdapter
+            }
+            binding.progressBar.invisible()
+            if (it.isEmpty()) {
+                binding.rvMain.invisible()
+                binding.tvMainText.visible()
+            } else {
+                binding.rvMain.visible()
+                binding.tvMainText.invisible()
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
-           when (resultCode) {
-               FormAddActivity.RESULT_CODE -> {
-                   Log.e("RESULT DATA", data?.getParcelableExtra<ActivityModel>("data")?.activity_name ?: "")
-                   Snackbar.make(binding.rvMain, "SUCCESS ADD DATA", Snackbar.LENGTH_SHORT).show()
-               }
-           }
+            when (resultCode) {
+                FormAddActivity.RESULT_CODE -> {
+                    Log.e(
+                        "RESULT DATA",
+                        data?.getParcelableExtra<ActivityModel>("data")?.activity_name ?: ""
+                    )
+                    Snackbar.make(binding.rvMain, "SUCCESS ADD DATA", Snackbar.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

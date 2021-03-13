@@ -7,8 +7,8 @@ import com.billbull.dev.android.kaizen.models.db.entity.ActivityModel
 @Dao
 interface ActivityDao {
 
-    @Insert
-    suspend fun insert(uangMasuk: ActivityModel)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(uangMasuk: ActivityModel): Long
 
     @Update
     suspend fun update(uangMasuk: ActivityModel)

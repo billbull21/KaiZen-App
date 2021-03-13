@@ -76,6 +76,11 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:text="CHOOSE"/>
             </LinearLayout>
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/sw_dailyReminder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set Daily Reminder"/>
         </LinearLayout>
     </ScrollView>
     <LinearLayout

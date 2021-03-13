@@ -1,6 +1,7 @@
 package com.billbull.dev.android.kaizen.models.db.entity
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -19,5 +20,7 @@ data class ActivityModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val activity_name: String,
-    val activity_time: String
+    val activity_time: String,
+    @ColumnInfo(defaultValue = "0") // 0 is false
+    val is_remind_active: Boolean
 ) : Parcelable
